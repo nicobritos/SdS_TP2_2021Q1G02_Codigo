@@ -23,6 +23,8 @@ public class Position {
 
     @Override
     public String toString() {
-        return "[ " + this.x.intValue() + "," + this.y.intValue() + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append(" [").append(this.x.intValue()).append(",").append(this.y.intValue()).append("] ");
+        return sb.toString();
     }
 }

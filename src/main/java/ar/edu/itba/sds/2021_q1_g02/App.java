@@ -1,8 +1,6 @@
 import models.CellularParticle;
-import models.MooreNeighborhood;
 import models.Position;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class App {
             }
         }
         int idx = 1;
-        for(CellularParticle particle : particles) {
+        for (CellularParticle particle : particles) {
             System.out.print(" [" + particle.getState() + "] ");
             if (idx % 5 == 0) {
                 System.out.println();

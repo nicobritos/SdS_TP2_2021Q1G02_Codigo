@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MooreNeighborhood {
@@ -10,10 +9,6 @@ public class MooreNeighborhood {
 
     public MooreNeighborhood(final int r) {
         this.r = r;
-    }
-
-    public int getRadio() {
-        return this.r;
     }
 
     public List<Position> getPositions() {

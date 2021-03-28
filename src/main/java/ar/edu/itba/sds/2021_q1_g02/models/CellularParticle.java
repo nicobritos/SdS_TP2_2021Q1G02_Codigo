@@ -23,12 +23,4 @@ public class CellularParticle extends Particle {
     public void setState(State newState) {
         this.state = newState;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CellularParticle)) return false;
-        CellularParticle particle = (CellularParticle) o;
-        return this.getId() == particle.getId();
-    }
 }

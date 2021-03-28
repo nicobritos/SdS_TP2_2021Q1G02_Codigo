@@ -28,7 +28,6 @@ public class Rules {
             wasRuleApplied = deathOverpopulationRule(neighborsAlive);
             if (wasRuleApplied) return new Pair<>(State.DEAD, true);
         }
-
         return revivalRule(neighborsAlive) ? new Pair<>(State.ALIVE, true) : new Pair<>(State.DEAD, false);
     }
 }

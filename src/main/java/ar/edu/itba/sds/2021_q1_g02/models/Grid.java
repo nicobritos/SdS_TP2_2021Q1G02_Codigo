@@ -17,4 +17,7 @@ public class Grid {
         return this.grid;
     }
 
+    public Particle getParticle(int x, int y) {
+        return this.grid[x][y];
+    }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GameOfLife {
+    private final int MOORE_NEIGHBORHOOD_RADIUS = 1;
     private List<CellularParticle> particles;
     private int M;
 
@@ -23,23 +24,24 @@ public class GameOfLife {
 
             for (int x = 0; x < M; x++) {
                 for (int y = 0; y < M; y++) {
-                    int neighborsAlive = getTotalNeighborsAlive(grid.getGrid(), grid.getGrid()[x][y].getPosition());
+                    int neighborsAlive = getTotalNeighborsAlive(grid.getGrid(), grid.getParticle(x, y).getPosition());
                     Pair<State, Boolean> stateUpdated =
-                            Rules.applyRules(((CellularParticle) grid.getGrid()[x][y]).getState(), neighborsAlive);
+                            Rules.applyRules(((CellularParticle) grid.getParticle(x, y)).getState(), neighborsAlive);
                     if (stateUpdated.getValue()) {
-                        State aux= nextStates.put(grid.getGrid()[x][y], stateUpdated.getKey());
+                        nextStates.put(grid.getParticle(x, y), stateUpdated.getKey());
                     }
                 }
             }
             for (CellularParticle particle : this.particles) {
-                boolean f = nextStates.containsKey(particle);
-                if (f) {
+                if (nextStates.containsKey(particle)) {
                     updateParticleState(particle, nextStates.get(particle));
                 }
             }
+
+            //TODO: Delete when already tested
             int idx = 1;
-            System.out.println("------- ITERATION" + i + "-----------");
-            for(CellularParticle particle : this.particles) {
+            System.out.println("------- ITERATION:" + i + "-----------");
+            for (CellularParticle particle : this.particles) {
                 System.out.print(" [" + particle.getState() + "] ");
                 if (idx % 5 == 0) {
                     System.out.println();
@@ -54,7 +56,7 @@ public class GameOfLife {
     }
 
     private int getTotalNeighborsAlive(Particle[][] grid, Position position) {
-        MooreNeighborhood mooreNeighborhood = new MooreNeighborhood(1);
+        MooreNeighborhood mooreNeighborhood = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
         List<Position> neighborsPositions = mooreNeighborhood.getPositions();
         int neighborsAlive = 0;
         for (Position neighborPosition : neighborsPositions) {
