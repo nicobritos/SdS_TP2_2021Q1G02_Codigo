@@ -1,19 +1,19 @@
 package models;
 
 public class Position {
-    private final Double x;
-    private final Double y;
+    protected final double x;
+    protected final double y;
 
     public Position(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Double getX() {
+    public double getX() {
         return this.x;
     }
 
-    public Double getY() {
+    public double getY() {
         return this.y;
     }
 
@@ -24,7 +24,7 @@ public class Position {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" [").append(this.x.intValue()).append(",").append(this.y.intValue()).append("] ");
+        sb.append(" [").append((int) this.x).append(",").append((int) this.y).append("] ");
         return sb.toString();
     }
 }

@@ -16,19 +16,21 @@ public class GameOfLife {
     }
 
     //MaxIteration como metodo de corte
-    public void simulate(int maxIterations) {
-        Grid grid = new Grid(this.M);
+    public void simulate2D(int maxIterations) {
+        Grid grid = new Grid2D(this.M);
         for (int i = 0; i < maxIterations; i++) {
             Map<Particle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
             for (int x = 0; x < M; x++) {
                 for (int y = 0; y < M; y++) {
-                    int neighborsAlive = getTotalNeighborsAlive(grid.getGrid(), grid.getParticle(x, y).getPosition());
+                    Position currentPosition = new Position(x, y);
+                    int neighborsAlive = getTotalNeighborsAlive((Particle[][]) grid.getGrid(), currentPosition);
                     Pair<State, Boolean> stateUpdated =
-                            Rules.applyRules(((CellularParticle) grid.getParticle(x, y)).getState(), neighborsAlive);
+                            Rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
+                                    neighborsAlive);
                     if (stateUpdated.getValue()) {
-                        nextStates.put(grid.getParticle(x, y), stateUpdated.getKey());
+                        nextStates.put(grid.getParticle(currentPosition), stateUpdated.getKey());
                     }
                 }
             }

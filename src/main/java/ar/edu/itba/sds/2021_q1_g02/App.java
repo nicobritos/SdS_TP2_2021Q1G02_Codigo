@@ -49,7 +49,7 @@ public class App {
             idx++;
         }
         GameOfLife GOL = new GameOfLife(particles, 5);
-        GOL.simulate(10);
+        GOL.simulate2D(10);
     }
 }
 
