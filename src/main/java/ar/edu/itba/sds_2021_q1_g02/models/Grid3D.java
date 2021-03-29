@@ -1,6 +1,5 @@
-package models;
+package ar.edu.itba.sds_2021_q1_g02.models;
 
-import java.util.Collection;
 import java.util.List;
 
 public class Grid3D implements Grid<Particle[][][]> {

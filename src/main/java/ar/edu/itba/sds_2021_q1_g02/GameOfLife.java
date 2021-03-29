@@ -1,5 +1,7 @@
+package ar.edu.itba.sds_2021_q1_g02;
+
+import ar.edu.itba.sds_2021_q1_g02.models.*;
 import javafx.util.Pair;
-import models.*;
 
 import java.util.HashMap;
 import java.util.List;

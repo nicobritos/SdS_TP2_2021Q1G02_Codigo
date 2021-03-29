@@ -1,5 +1,7 @@
-import models.CellularParticle;
-import models.Position;
+package ar.edu.itba.sds_2021_q1_g02;
+
+import ar.edu.itba.sds_2021_q1_g02.models.CellularParticle;
+import ar.edu.itba.sds_2021_q1_g02.models.Position;
 
 import java.util.Arrays;
 import java.util.List;
