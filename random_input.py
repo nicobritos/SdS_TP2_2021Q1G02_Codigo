@@ -28,12 +28,13 @@ if os.path.exists(input_file):
 input = open(input_file, "a")
 
 OPEN_SPACE = 40
-w, h, d = sys.argv[2]+ 2*OPEN_SPACE, sys.argv[2] +2*OPEN_SPACE, sys.argv[2] +2*OPEN_SPACE
+L = int(sys.argv[2])
+w, h, d = L+ 2*OPEN_SPACE, L +2*OPEN_SPACE, L+2*OPEN_SPACE
 if sys.argv[1] == "2D":
     for y in range(h):
         for x in range(w):
             # radius
-            input.write("1")
+            input.write("0.5")
             input.write('\t')
             # property
             input.write('1')
