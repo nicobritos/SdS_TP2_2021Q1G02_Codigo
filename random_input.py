@@ -70,7 +70,7 @@ if sys.argv[1] == "2D":
                 elif alive_count > 0:
                     alive_count -= 1
                     input.write('1')
-                elif dead_count > 0:
+                else:
                     dead_count -= 1
                     input.write('0')
             else:
@@ -84,7 +84,7 @@ else:
         for y in range(h):
             for x in range(w):
                 # radius
-                input.write("1")
+                input.write("0.5")
                 input.write('\t')
                 # property
                 input.write('1')
@@ -112,7 +112,7 @@ else:
                     elif alive_count > 0:
                         alive_count -= 1
                         input.write('1')
-                    elif dead_count > 0:
+                    else:
                         dead_count -= 1
                         input.write('0')
                 else:

@@ -24,7 +24,16 @@ public class GameOfLife {
     //MaxIteration como metodo de corte
     public void simulate2D(int maxIterations) {
         Grid2D grid = new Grid2D(this.M);
-        for (int i = 0; i < maxIterations; i++) {
+
+        try {
+            create2DOutputFile(this.particles, 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 1; i < maxIterations; i++) {
+            System.out.println("Started iteration: " + i);
+
             Map<Particle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
@@ -51,13 +60,24 @@ public class GameOfLife {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            System.out.println("Finished iteration: " + i);
         }
     }
 
     //MaxIteration como metodo de corte
     public void simulate3D(int maxIterations) {
         Grid3D grid = new Grid3D(this.M);
-        for (int i = 0; i < maxIterations; i++) {
+
+        try {
+            create3DOutputFile(this.particles, 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 1; i < maxIterations; i++) {
+            System.out.println("Started iteration: " + i);
+
             Map<Particle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
@@ -86,6 +106,8 @@ public class GameOfLife {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            System.out.println("Finished iteration: " + i);
         }
     }
 
@@ -118,25 +140,16 @@ public class GameOfLife {
             for (int y = 0; y < this.M; y++) {
                 CellularParticle particle = yParticleMap.get(y);
 
-                if (particle != null) {
-                    myFile.write(Double.toString(particle.getRadius()));
-                    myFile.write('\t');
-                    myFile.write(Double.toString(particle.getPosition().getX()));
-                    myFile.write('\t');
-                    myFile.write(Double.toString(particle.getPosition().getY()));
-                    myFile.write('\t');
+                myFile.write(Integer.toString(particle.getId()));
+                myFile.write('\t');
+                myFile.write(Double.toString(particle.getRadius()));
+                myFile.write('\t');
+                myFile.write(Double.toString(particle.getPosition().getX()));
+                myFile.write('\t');
+                myFile.write(Double.toString(particle.getPosition().getY()));
+                myFile.write('\t');
 
-                    myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
-                } else {
-                    myFile.write("0");
-                    myFile.write('\t');
-                    myFile.write(Integer.toString(x));
-                    myFile.write('\t');
-                    myFile.write(Integer.toString(y));
-                    myFile.write('\t');
-
-                    myFile.write("1");
-                }
+                myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
 
                 myFile.write('\n');
             }
@@ -179,29 +192,19 @@ public class GameOfLife {
                 for (int z = 0; z < this.M; z++) {
                     CellularParticle particle = zParticleMap.get(z);
 
-                    if (particle != null) {
-                        myFile.write(Double.toString(particle.getRadius()));
-                        myFile.write('\t');
-                        myFile.write(Double.toString(particle.getPosition().getX()));
-                        myFile.write('\t');
-                        myFile.write(Double.toString(particle.getPosition().getY()));
-                        myFile.write('\t');
-                        myFile.write(Double.toString(particle.getPosition().getZ()));
-                        myFile.write('\t');
+                    myFile.write(Integer.toString(particle.getId()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getRadius()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getPosition().getX()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getPosition().getY()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getPosition().getZ()));
+                    myFile.write('\t');
 
-                        myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
-                    } else {
-                        myFile.write("0");
-                        myFile.write('\t');
-                        myFile.write(Integer.toString(x));
-                        myFile.write('\t');
-                        myFile.write(Integer.toString(y));
-                        myFile.write('\t');
-                        myFile.write(Integer.toString(z));
-                        myFile.write('\t');
+                    myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
 
-                        myFile.write("1");
-                    }
 
                     myFile.write('\n');
                 }

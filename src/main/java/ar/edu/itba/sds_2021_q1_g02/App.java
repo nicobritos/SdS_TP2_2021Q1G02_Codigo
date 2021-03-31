@@ -13,10 +13,12 @@ public class App {
     public static void main(String[] args) throws ParseException, IOException {
         CommandParser.getInstance().parse(args);
 
+        System.out.println("Parsing particles");
         Pair<List<CellularParticle>, Integer> particles = ParticleParser.parseParticles(CommandParser.getInstance().getInputPath(), CommandParser.getInstance().isEnable3D());
 
         GameOfLife GOL = new GameOfLife(particles.getKey(), particles.getValue());
 
+        System.out.println("Running simulation");
         if (CommandParser.getInstance().isEnable3D())
             GOL.simulate3D(CommandParser.getInstance().getMaxIterations());
         else
