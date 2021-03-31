@@ -19,7 +19,7 @@ public class App {
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] info = data.split("\t");
-                CellularParticle particle = new CellularParticle(i, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[4]) == 1 ? true : false);
+                CellularParticle particle = new CellularParticle(i, Double.parseDouble(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[4]) == 1 ? true : false);
                 particles.add(particle);
                 particles.get(i).setPosition(new Position(Integer.parseInt(info[2]), Integer.parseInt(info[3])));
                 i++;

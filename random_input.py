@@ -20,7 +20,7 @@ if total != 3:
     print("2 argument needed, 1. 2D or 3D, 2. length of the side of the matrix in wich there will be \'alive\'")
     quit()
 if sys.argv[1] != "2D" and sys.argv[1] != "3D":
-    print("1 argument needed, 2D or 3D, check it has to be in CAPS_LOCK")
+    print("2 argument needed, 1. 2D or 3D (check it has to be in CAPS_LOCK), 2.length of the side of the matrix in wich there will be \'alive\' ")
     quit()
 input_file = "input" + ".txt"
 if os.path.exists(input_file):
@@ -34,7 +34,7 @@ if sys.argv[1] == "2D":
     for y in range(h):
         for x in range(w):
             # radius
-            input.write("1")
+            input.write("0.5")
             input.write('\t')
             # property
             input.write('1')
@@ -78,5 +78,5 @@ else:
                 input.write('\n')
 
 input.close()
-
+print("the length of the matrix is of: " + str(w) )
 
