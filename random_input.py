@@ -2,7 +2,7 @@ import os
 import sys
 import random
 import math
-
+from random import randrange
 # FORMATO INPUT
 #if 2D
 #M
@@ -41,7 +41,9 @@ input.write('\n')
 if sys.argv[1] == "2D":
     alive_count = math.ceil(L ** 2 * alive_percentage)
     dead_count = math.floor(L ** 2 * (1 - alive_percentage))
-
+    alive = []
+    for i in range(alive_count):
+        alive.append([OPEN_SPACE+randrange(L), OPEN_SPACE+randrange(L)])
     for y in range(h):
         for x in range(w):
             # radius
@@ -57,29 +59,17 @@ if sys.argv[1] == "2D":
             input.write(str(y))
             input.write('\t')
             # alive/dead
-            if y>OPEN_SPACE and y<h-OPEN_SPACE and x>OPEN_SPACE and x<w-OPEN_SPACE:
-                if alive_count > 0 and dead_count > 0:
-                    alive = random.choice([0, 1])
-
-                    if alive == 1:
-                        alive_count -= 1
-                    else:
-                        dead_count -= 1
-
-                    input.write(str(alive))
-                elif alive_count > 0:
-                    alive_count -= 1
-                    input.write('1')
-                else:
-                    dead_count -= 1
-                    input.write('0')
+            if [x,y] in alive:
+                input.write('1')
             else:
-                input.write("0")
+                input.write('0')
             input.write('\n')
 else:
     alive_count = math.ceil(L ** 3 * alive_percentage)
     dead_count = math.floor(L ** 3 * (1 - alive_percentage))
-
+    alive = []
+    for i in range(alive_count):
+        alive.append([OPEN_SPACE+randrange(L), OPEN_SPACE+randrange(L), OPEN_SPACE + randrange(L)])
     for z in range(d):
         for y in range(h):
             for x in range(w):
@@ -99,24 +89,10 @@ else:
                 input.write(str(z))
                 input.write('\t')
                 # alive/dead
-                if y>OPEN_SPACE and y<h-OPEN_SPACE and x>OPEN_SPACE and x<w-OPEN_SPACE and z>OPEN_SPACE and z<d-OPEN_SPACE:
-                    if alive_count > 0 and dead_count > 0:
-                        alive = random.choice([0, 1])
-
-                        if alive == 1:
-                            alive_count -= 1
-                        else:
-                            dead_count -= 1
-
-                        input.write(str(alive))
-                    elif alive_count > 0:
-                        alive_count -= 1
-                        input.write('1')
-                    else:
-                        dead_count -= 1
-                        input.write('0')
+                if [x,y,z] in alive:
+                    input.write('1')
                 else:
-                    input.write("0")
+                    input.write('0')
                 input.write('\n')
 
 input.close()
