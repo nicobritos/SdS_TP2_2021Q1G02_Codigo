@@ -5,14 +5,12 @@ import random
 # FORMATO INPUT
 #if 2D
 #M
-#N particles
 #radio1 property    x1   y1   (alive/dead (0/1))
 #radio1 property    x2   y2   (alive/dead (0/1)) 
 #radio1 property    x3   y3   (alive/dead (0/1)) 
 
 #if 3D
 #M
-#N particles
 #radio1 property1   x1   y1     z1   (alive/dead (0/1))
 #radio1 property2   x2   y2     z2   (alive/dead (0/1)) 
 #radio1 property3   x3   y3     z3   (alive/dead (0/1)) 
@@ -39,8 +37,6 @@ input.write(str(w))
 input.write('\n')
 
 if sys.argv[1] == "2D":
-    input.write(str(L ** 2))
-    input.write('\n')
     for y in range(h):
         for x in range(w):
             # radius
@@ -62,8 +58,6 @@ if sys.argv[1] == "2D":
                 input.write("0")
             input.write('\n')
 else:
-    input.write(str(L ** 3))
-    input.write('\n')
     for z in range(d):
         for y in range(h):
             for x in range(w):

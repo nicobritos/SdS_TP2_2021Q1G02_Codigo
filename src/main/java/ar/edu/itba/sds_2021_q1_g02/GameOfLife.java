@@ -47,20 +47,10 @@ public class GameOfLife {
             }
 
             try {
-                createOutputFile(this.particles, i, false);
+                create2DOutputFile(this.particles, i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //TODO: Delete when already tested
-            int idx = 1;
-//            System.out.println("------- ITERATION:" + i + "-----------");
-//            for (CellularParticle particle : this.particles) {
-//                System.out.print(" [" + particle.getState() + "] ");
-//                if (idx % 5 == 0) {
-//                    System.out.println();
-//                }
-//                idx++;
-//            }
         }
     }
 
@@ -92,55 +82,129 @@ public class GameOfLife {
             }
 
             try {
-                createOutputFile(this.particles, i, true);
+                create3DOutputFile(this.particles, i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //TODO: Delete when already tested
-            int idx = 1;
-//            System.out.println("------- ITERATION:" + i + "-----------");
-//            for (CellularParticle particle : this.particles) {
-//                System.out.print(" [" + particle.getState() + "] ");
-//                if (idx % 5 == 0) {
-//                    System.out.println();
-//                }
-//                idx++;
-//            }
         }
     }
 
-    private void createOutputFile(List<CellularParticle> particles, int i, boolean includeZ) throws IOException {
-        List<CellularParticle> livingParticles = particles.stream()
-                .filter(particle -> State.ALIVE.equals(particle.getState()))
-                .collect(Collectors.toList());
-
+    private void create2DOutputFile(List<CellularParticle> particles, int i) throws IOException {
         // create new file
-        String filePath = "./ovito." + (includeZ ? "3d." : "2d.") + i + ".txt";
+        String filePath = "./ovito.2d." + i + ".txt";
         File file = new File(filePath);
         if (!file.createNewFile()) {
             file.delete();
             file.createNewFile();
         }
 
-
+        long count = particles.size();
         // write on file
         FileWriter myFile = new FileWriter(filePath);
-        myFile.write(Long.toString(livingParticles.stream().count()));
+        myFile.write(Long.toString(count));
         myFile.write('\n');
         myFile.write('\n');
 
-        long count = livingParticles.stream().count();
-        for(int j=0; j<count ; j++){
-            myFile.write(Double.toString(livingParticles.get(j).getRadius()));
-            myFile.write('\t');
-            myFile.write(Double.toString(livingParticles.get(j).getPosition().getX()));
-            myFile.write('\t');
-            myFile.write(Double.toString(livingParticles.get(j).getPosition().getY()));
-            myFile.write('\n');
+        Map<Integer, Map<Integer, CellularParticle>> xyParticleMap = new HashMap<>();
+        for (CellularParticle particle : particles) {
+            Map<Integer, CellularParticle> yParticleMap = xyParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
 
-            if (includeZ) {
-                myFile.write(Double.toString(livingParticles.get(j).getPosition().getZ()));
+            yParticleMap.put((int) particle.getPosition().getY(), particle);
+        }
+
+        for (int x = 0; x < this.M; x++) {
+            Map<Integer, CellularParticle> yParticleMap = xyParticleMap.get(x);
+
+            for (int y = 0; y < this.M; y++) {
+                CellularParticle particle = yParticleMap.get(y);
+
+                if (particle != null) {
+                    myFile.write(Double.toString(particle.getRadius()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getPosition().getX()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particle.getPosition().getY()));
+                    myFile.write('\t');
+
+                    myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
+                } else {
+                    myFile.write("0");
+                    myFile.write('\t');
+                    myFile.write(Integer.toString(x));
+                    myFile.write('\t');
+                    myFile.write(Integer.toString(y));
+                    myFile.write('\t');
+
+                    myFile.write("1");
+                }
+
                 myFile.write('\n');
+            }
+        }
+
+
+        myFile.close();
+    }
+
+    private void create3DOutputFile(List<CellularParticle> particles, int i) throws IOException {
+        // create new file
+        String filePath = "./ovito.3d." + i + ".txt";
+        File file = new File(filePath);
+        if (!file.createNewFile()) {
+            file.delete();
+            file.createNewFile();
+        }
+
+        long count = particles.stream().count();
+        // write on file
+        FileWriter myFile = new FileWriter(filePath);
+        myFile.write(Long.toString(count));
+        myFile.write('\n');
+        myFile.write('\n');
+
+        Map<Integer, Map<Integer, Map<Integer, CellularParticle>>> xyzParticleMap = new HashMap<>();
+        for (CellularParticle particle : particles) {
+            Map<Integer, Map<Integer, CellularParticle>> yzParticleMap = xyzParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
+            Map<Integer, CellularParticle> zParticleMap = yzParticleMap.computeIfAbsent((int) particle.getPosition().getY(), integer -> new HashMap<>());
+
+            zParticleMap.put((int) particle.getPosition().getZ(), particle);
+        }
+
+        for (int x = 0; x < this.M; x++) {
+            Map<Integer, Map<Integer, CellularParticle>> yzParticleMap = xyzParticleMap.get(x);
+
+            for (int y = 0; y < this.M; y++) {
+                Map<Integer, CellularParticle> zParticleMap = yzParticleMap.get(y);
+
+                for (int z = 0; z < this.M; z++) {
+                    CellularParticle particle = zParticleMap.get(z);
+
+                    if (particle != null) {
+                        myFile.write(Double.toString(particle.getRadius()));
+                        myFile.write('\t');
+                        myFile.write(Double.toString(particle.getPosition().getX()));
+                        myFile.write('\t');
+                        myFile.write(Double.toString(particle.getPosition().getY()));
+                        myFile.write('\t');
+                        myFile.write(Double.toString(particle.getPosition().getZ()));
+                        myFile.write('\t');
+
+                        myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
+                    } else {
+                        myFile.write("0");
+                        myFile.write('\t');
+                        myFile.write(Integer.toString(x));
+                        myFile.write('\t');
+                        myFile.write(Integer.toString(y));
+                        myFile.write('\t');
+                        myFile.write(Integer.toString(z));
+                        myFile.write('\t');
+
+                        myFile.write("1");
+                    }
+
+                    myFile.write('\n');
+                }
             }
         }
 
