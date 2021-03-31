@@ -9,7 +9,7 @@ public class Grid2D implements Grid<Particle[][]> {
         this.grid = new Particle[M][M];
     }
 
-    public void populateGrid(final List<Particle> particles) {
+    public void populateGrid(final List<? extends Particle> particles) {
 
         particles.forEach(particle -> this.grid[(int) particle.getPosition().getX()][(int) particle.getPosition().getY()] = particle);
     }

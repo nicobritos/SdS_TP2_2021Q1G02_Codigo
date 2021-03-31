@@ -3,7 +3,7 @@ package ar.edu.itba.sds_2021_q1_g02.models;
 import java.util.List;
 
 public interface Grid<T> {
-    void populateGrid(final List<Particle> particles);
+    void populateGrid(final List<? extends Particle> particles);
 
     T getGrid();
 

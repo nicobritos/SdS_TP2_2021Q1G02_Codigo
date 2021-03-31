@@ -9,11 +9,11 @@ public class Grid3D implements Grid<Particle[][][]> {
         this.grid = new Particle[M][M][M];
     }
 
-    public void populateGrid(final List<Particle> particles) {
+    public void populateGrid(final List<? extends Particle> particles) {
         particles.forEach(particle ->
         {
-            if (particle.getPosition() instanceof Position3D) {
-                grid[(int) particle.getPosition().getX()][(int) particle.getPosition().getY()][(int) ((Position3D) particle.getPosition()).getZ()] = particle;
+            if (particle.getPosition() != null) {
+                grid[(int) particle.getPosition().getX()][(int) particle.getPosition().getY()][(int) particle.getPosition().getZ()] = particle;
             } else {
                 return;
             }
@@ -26,8 +26,8 @@ public class Grid3D implements Grid<Particle[][][]> {
 
     @Override
     public Particle getParticle(Position position) {
-        if (position instanceof Position3D) {
-            return this.grid[(int) position.getX()][(int) position.getY()][(int) ((Position3D) position).getZ()];
+        if (position != null) {
+            return this.grid[(int) position.getX()][(int) position.getY()][(int) position.getZ()];
         }
         return null;
     }
