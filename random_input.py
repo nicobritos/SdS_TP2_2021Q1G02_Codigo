@@ -34,7 +34,7 @@ if sys.argv[1] == "2D":
     for y in range(h):
         for x in range(w):
             # radius
-            input.write("0.5")
+            input.write("1")
             input.write('\t')
             # property
             input.write('1')
