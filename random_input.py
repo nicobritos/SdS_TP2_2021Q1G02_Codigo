@@ -3,6 +3,7 @@ import sys
 import random
 import math
 from random import randrange
+import glob
 # FORMATO INPUT
 #if 2D
 #M
@@ -29,6 +30,14 @@ input_file = "input" + ".txt"
 if os.path.exists(input_file):
     os.remove(input_file)
 input = open(input_file, "a")
+
+fileList = glob.glob('ovito.*d.*.txt')
+print(fileList)
+for filePath in fileList:
+    try:
+        os.remove(filePath)
+    except:
+        print("Error while deleting file : ", filePath)
 
 OPEN_SPACE = 40
 L = int(sys.argv[2])
