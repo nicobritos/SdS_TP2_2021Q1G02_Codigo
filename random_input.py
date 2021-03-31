@@ -4,12 +4,16 @@ import random
 
 # FORMATO INPUT
 #if 2D
-#radio1 property    x1   y1   (alive/dead (0/1)) 
+#M
+#N particles
+#radio1 property    x1   y1   (alive/dead (0/1))
 #radio1 property    x2   y2   (alive/dead (0/1)) 
 #radio1 property    x3   y3   (alive/dead (0/1)) 
 
-#if 23
-#radio1 property1   x1   y1     z1   (alive/dead (0/1)) 
+#if 3D
+#M
+#N particles
+#radio1 property1   x1   y1     z1   (alive/dead (0/1))
 #radio1 property2   x2   y2     z2   (alive/dead (0/1)) 
 #radio1 property3   x3   y3     z3   (alive/dead (0/1)) 
 
@@ -17,10 +21,10 @@ import random
 # Get the total number of args passed
 total = len(sys.argv)
 if total != 3:
-    print("2 argument needed, 1. 2D or 3D, 2. length of the side of the matrix in wich there will be \'alive\'")
+    print("2 argument needed, 1. 2D or 3D, 2. length of the side of the matrix in which there will be \'alive\'")
     quit()
 if sys.argv[1] != "2D" and sys.argv[1] != "3D":
-    print("2 argument needed, 1. 2D or 3D (check it has to be in CAPS_LOCK), 2.length of the side of the matrix in wich there will be \'alive\' ")
+    print("2 argument needed, 1. 2D or 3D (check it has to be in CAPS_LOCK), 2.length of the side of the matrix in which there will be \'alive\' (L^2 (or L^3) = No of particles)")
     quit()
 input_file = "input" + ".txt"
 if os.path.exists(input_file):
@@ -30,7 +34,13 @@ input = open(input_file, "a")
 OPEN_SPACE = 40
 L = int(sys.argv[2])
 w, h, d = L+ 2*OPEN_SPACE, L +2*OPEN_SPACE, L+2*OPEN_SPACE
+
+input.write(str(w))
+input.write('\n')
+
 if sys.argv[1] == "2D":
+    input.write(str(L ** 2))
+    input.write('\n')
     for y in range(h):
         for x in range(w):
             # radius
@@ -52,6 +62,8 @@ if sys.argv[1] == "2D":
                 input.write("0")
             input.write('\n')
 else:
+    input.write(str(L ** 3))
+    input.write('\n')
     for z in range(d):
         for y in range(h):
             for x in range(w):
@@ -78,5 +90,3 @@ else:
                 input.write('\n')
 
 input.close()
-print("the length of the matrix is of: " + str(w) )
-
