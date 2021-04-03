@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GameOfLife {
-    private final int MOORE_NEIGHBORHOOD_RADIUS = 1;
+    private static final int MOORE_NEIGHBORHOOD_RADIUS = 1;
+    private static final MooreNeighborhood MOORE_NEIGHBORHOOD = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
+
     private List<CellularParticle> particles;
     private int M;
 
@@ -220,8 +222,7 @@ public class GameOfLife {
     }
 
     private int getTotalNeighborsAlive(Particle[][] grid, Position position) {
-        MooreNeighborhood mooreNeighborhood = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
-        List<Position> neighborsPositions = mooreNeighborhood.getPositions();
+        List<Position> neighborsPositions = GameOfLife.MOORE_NEIGHBORHOOD.getPositions();
         int neighborsAlive = 0;
         for (Position neighborPosition : neighborsPositions) {
             int neighbor_x = (int) (position.getX() + neighborPosition.getX());
@@ -237,8 +238,7 @@ public class GameOfLife {
     }
 
     private int getTotalNeighborsAlive(Particle[][][] grid, Position position) {
-        MooreNeighborhood mooreNeighborhood = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
-        List<Position> neighborsPositions = mooreNeighborhood.getPositions3D();
+        List<Position> neighborsPositions = GameOfLife.MOORE_NEIGHBORHOOD.getPositions3D();
 
         int neighborsAlive = 0;
         for (Position neighborPosition : neighborsPositions) {
