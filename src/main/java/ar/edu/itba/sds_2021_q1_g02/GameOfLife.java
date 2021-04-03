@@ -45,7 +45,7 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(); i++) {
+        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(true); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
@@ -88,7 +88,7 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(); i++) {
+        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(false); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
@@ -272,11 +272,16 @@ public class GameOfLife {
         return neighborsAlive;
     }
 
-    private boolean areCuttingMethodsApplied() {
+    private boolean areCuttingMethodsApplied(boolean is2Dsimulation) {
         for (CellularParticle particle : this.particles) {
             if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M)) {
                 if (particle.getState().equals(State.ALIVE))
                     return true;
+            }
+            if (!is2Dsimulation) {
+                if ((particle.getPosition().getZ() == 0) || (particle.getPosition().getZ() == this.M)) {
+                    return true;
+                }
             }
         }
         return false;
