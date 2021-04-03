@@ -11,7 +11,7 @@ public class Rules {
 
     public Rules() {
         this.solitudeDeathLimit = 2;
-        this.overpopulationDeathLimit = 2;
+        this.overpopulationDeathLimit = 4;
         this.revivalMinLimit = 3;
         this.revivalMaxLimit = 3;
     }

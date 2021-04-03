@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,19 @@ public class GameOfLife {
         this.M = M;
     }
 
+    //TODO: Implement different set of rules
+    List<Rules> getSetOfRules() {
+        List<Rules> setOfRules = new ArrayList<>();
+        setOfRules.add(new Rules());
+        setOfRules.add(new Rules(0, 8, 1, 7));
+        return setOfRules;
+    }
+
     //MaxIteration como metodo de corte
     public void simulate2D(int maxIterations) {
         Grid2D grid = new Grid2D(this.M);
-        Rules rules = new Rules();
+        //TODO: Change when GameOfLife different cases are defined
+        Rules rules = getSetOfRules().get(1);
 
         try {
             create2DOutputFile(this.particles, 0);
@@ -35,7 +45,7 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations; i++) {
+        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
@@ -78,7 +88,7 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations; i++) {
+        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
@@ -260,5 +270,15 @@ public class GameOfLife {
             }
         }
         return neighborsAlive;
+    }
+
+    private boolean areCuttingMethodsApplied() {
+        for (CellularParticle particle : this.particles) {
+            if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M)) {
+                if (particle.getState().equals(State.ALIVE))
+                    return true;
+            }
+        }
+        return false;
     }
 }
