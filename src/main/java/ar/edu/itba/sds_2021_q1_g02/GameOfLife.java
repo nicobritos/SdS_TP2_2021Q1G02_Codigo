@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class GameOfLife {
@@ -36,7 +37,7 @@ public class GameOfLife {
         for (int i = 1; i < maxIterations; i++) {
             System.out.println("Started iteration: " + i);
 
-            Map<Particle, State> nextStates = new HashMap<>();
+            Map<CellularParticle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
             for (int x = 0; x < M; x++) {
@@ -47,14 +48,12 @@ public class GameOfLife {
                             Rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
                                     neighborsAlive);
                     if (stateUpdated.getValue()) {
-                        nextStates.put(grid.getParticle(currentPosition), stateUpdated.getKey());
+                        nextStates.put((CellularParticle) grid.getParticle(currentPosition), stateUpdated.getKey());
                     }
                 }
             }
-            for (CellularParticle particle : this.particles) {
-                if (nextStates.containsKey(particle)) {
-                    updateParticleState(particle, nextStates.get(particle));
-                }
+            for (Entry<CellularParticle, State> entry : nextStates.entrySet()) {
+                updateParticleState(entry.getKey(), entry.getValue());
             }
 
             try {
@@ -80,7 +79,7 @@ public class GameOfLife {
         for (int i = 1; i < maxIterations; i++) {
             System.out.println("Started iteration: " + i);
 
-            Map<Particle, State> nextStates = new HashMap<>();
+            Map<CellularParticle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
             for (int x = 0; x < M; x++) {
@@ -92,15 +91,13 @@ public class GameOfLife {
                                 Rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
                                         neighborsAlive);
                         if (stateUpdated.getValue()) {
-                            nextStates.put(grid.getParticle(currentPosition), stateUpdated.getKey());
+                            nextStates.put((CellularParticle) grid.getParticle(currentPosition), stateUpdated.getKey());
                         }
                     }
                 }
             }
-            for (CellularParticle particle : this.particles) {
-                if (nextStates.containsKey(particle)) {
-                    updateParticleState(particle, nextStates.get(particle));
-                }
+            for (Entry<CellularParticle, State> entry : nextStates.entrySet()) {
+                updateParticleState(entry.getKey(), entry.getValue());
             }
 
             try {
