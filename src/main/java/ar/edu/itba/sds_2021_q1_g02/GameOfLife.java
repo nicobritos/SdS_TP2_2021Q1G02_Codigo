@@ -27,6 +27,7 @@ public class GameOfLife {
     //MaxIteration como metodo de corte
     public void simulate2D(int maxIterations) {
         Grid2D grid = new Grid2D(this.M);
+        Rules rules = new Rules();
 
         try {
             create2DOutputFile(this.particles, 0);
@@ -45,7 +46,7 @@ public class GameOfLife {
                     Position currentPosition = new Position(x, y);
                     int neighborsAlive = getTotalNeighborsAlive(grid.getGrid(), currentPosition);
                     Pair<State, Boolean> stateUpdated =
-                            Rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
+                            rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
                                     neighborsAlive);
                     if (stateUpdated.getValue()) {
                         nextStates.put((CellularParticle) grid.getParticle(currentPosition), stateUpdated.getKey());
@@ -69,6 +70,7 @@ public class GameOfLife {
     //MaxIteration como metodo de corte
     public void simulate3D(int maxIterations) {
         Grid3D grid = new Grid3D(this.M);
+        Rules rules = new Rules();
 
         try {
             create3DOutputFile(this.particles, 0);
@@ -88,7 +90,7 @@ public class GameOfLife {
                         Position currentPosition = new Position(x, y, z);
                         int neighborsAlive = this.getTotalNeighborsAlive(grid.getGrid(), currentPosition);
                         Pair<State, Boolean> stateUpdated =
-                                Rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
+                                rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
                                         neighborsAlive);
                         if (stateUpdated.getValue()) {
                             nextStates.put((CellularParticle) grid.getParticle(currentPosition), stateUpdated.getKey());
@@ -128,7 +130,8 @@ public class GameOfLife {
 
         Map<Integer, Map<Integer, CellularParticle>> xyParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {
-            Map<Integer, CellularParticle> yParticleMap = xyParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
+            Map<Integer, CellularParticle> yParticleMap =
+                    xyParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
 
             yParticleMap.put((int) particle.getPosition().getY(), particle);
         }
@@ -176,8 +179,10 @@ public class GameOfLife {
 
         Map<Integer, Map<Integer, Map<Integer, CellularParticle>>> xyzParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {
-            Map<Integer, Map<Integer, CellularParticle>> yzParticleMap = xyzParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
-            Map<Integer, CellularParticle> zParticleMap = yzParticleMap.computeIfAbsent((int) particle.getPosition().getY(), integer -> new HashMap<>());
+            Map<Integer, Map<Integer, CellularParticle>> yzParticleMap =
+                    xyzParticleMap.computeIfAbsent((int) particle.getPosition().getX(), integer -> new HashMap<>());
+            Map<Integer, CellularParticle> zParticleMap =
+                    yzParticleMap.computeIfAbsent((int) particle.getPosition().getY(), integer -> new HashMap<>());
 
             zParticleMap.put((int) particle.getPosition().getZ(), particle);
         }
@@ -245,8 +250,8 @@ public class GameOfLife {
 
             if (
                     (neighbor_x >= 0) && (neighbor_x < grid.length)
-                    && (neighbor_y >= 0) && (neighbor_y < grid.length)
-                    && (neighbor_z >= 0) && (neighbor_z < grid.length)
+                            && (neighbor_y >= 0) && (neighbor_y < grid.length)
+                            && (neighbor_z >= 0) && (neighbor_z < grid.length)
             ) {
                 State state = ((CellularParticle) grid[neighbor_x][neighbor_y][neighbor_z]).getState();
                 if (state.equals(State.ALIVE)) {

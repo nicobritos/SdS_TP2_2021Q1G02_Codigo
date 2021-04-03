@@ -3,30 +3,46 @@ package ar.edu.itba.sds_2021_q1_g02.models;
 import javafx.util.Pair;
 
 public class Rules {
-    private static boolean stayAliveRule(final int neighborsAlive) {
-        return (neighborsAlive == 2 || neighborsAlive == 3);
+
+    private int solitudeDeathLimit;
+    private int overpopulationDeathLimit;
+    private int revivalMinLimit;
+    private int revivalMaxLimit;
+
+    public Rules() {
+        this.solitudeDeathLimit = 2;
+        this.overpopulationDeathLimit = 2;
+        this.revivalMinLimit = 3;
+        this.revivalMaxLimit = 3;
     }
 
-    private static boolean revivalRule(final int neighborsAlive) {
-        return neighborsAlive == 3;
+    public Rules(int solitudeDeathLimit, int overpopulationDeathLimit, int revivalMinLimit, int revivalMaxLimit) {
+        this.solitudeDeathLimit = solitudeDeathLimit;
+        this.overpopulationDeathLimit = overpopulationDeathLimit;
+        this.revivalMinLimit = revivalMinLimit;
+        this.revivalMaxLimit = revivalMaxLimit;
     }
 
-    private static boolean deathSolitudeRule(final int neighborsAlive) {
-        return (neighborsAlive == 0 || neighborsAlive == 1);
+    private boolean deathSolitudeRule(final int neighborsAlive) {
+        int MIN_NEIGHBOURS_ALIVE = 0;
+        return (neighborsAlive >= MIN_NEIGHBOURS_ALIVE && neighborsAlive <= this.solitudeDeathLimit);
     }
 
-    private static boolean deathOverpopulationRule(final int neighborsAlive) {
-        return (neighborsAlive >= 4);
+    private boolean deathOverpopulationRule(final int neighborsAlive) {
+        return neighborsAlive >= this.overpopulationDeathLimit;
     }
 
-    public static Pair<State, Boolean> applyRules(final State state, final int neighborsAlive) {
+    private boolean revivalRule(final int neighborsAlive) {
+        return (neighborsAlive >= this.revivalMinLimit && neighborsAlive <= this.revivalMaxLimit);
+    }
+
+    public Pair<State, Boolean> applyRules(final State state, final int neighborsAlive) {
         if (state.equals(State.ALIVE)) {
-            boolean wasRuleApplied = stayAliveRule(neighborsAlive);
-            if (wasRuleApplied) return new Pair<>(State.ALIVE, false);
-            wasRuleApplied = deathSolitudeRule(neighborsAlive);
+            boolean wasRuleApplied = deathSolitudeRule(neighborsAlive);
             if (wasRuleApplied) return new Pair<>(State.DEAD, true);
             wasRuleApplied = deathOverpopulationRule(neighborsAlive);
             if (wasRuleApplied) return new Pair<>(State.DEAD, true);
+            else return new Pair<>(State.ALIVE, false);
         }
         return revivalRule(neighborsAlive) ? new Pair<>(State.ALIVE, true) : new Pair<>(State.DEAD, false);
     }

@@ -51,8 +51,11 @@ if sys.argv[1] == "2D":
     alive_count = math.ceil(L ** 2 * alive_percentage)
     dead_count = math.floor(L ** 2 * (1 - alive_percentage))
     alive = []
-    for i in range(alive_count):
-        alive.append([OPEN_SPACE+randrange(L), OPEN_SPACE+randrange(L)])
+    print(alive_count)
+    while(len(alive) < alive_count):
+        x_rand, y_rand = OPEN_SPACE+randrange(L), OPEN_SPACE+randrange(L)
+        if([x_rand, y_rand] not in alive):
+            alive.append([x_rand, y_rand])
     for y in range(h):
         for x in range(w):
             # radius
