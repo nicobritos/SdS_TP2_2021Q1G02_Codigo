@@ -25,19 +25,9 @@ public class GameOfLife {
         this.M = M;
     }
 
-    //TODO: Implement different set of rules
-    List<Rules> getSetOfRules() {
-        List<Rules> setOfRules = new ArrayList<>();
-        setOfRules.add(new Rules());
-        setOfRules.add(new Rules(0, 8, 1, 7));
-        return setOfRules;
-    }
-
     //MaxIteration como metodo de corte
-    public void simulate2D(int maxIterations) {
+    public void simulate2D(int maxIterations, Rules rules) {
         Grid2D grid = new Grid2D(this.M);
-        //TODO: Change when GameOfLife different cases are defined
-        Rules rules = getSetOfRules().get(1);
 
         try {
             create2DOutputFile(this.particles, 0);
@@ -78,9 +68,8 @@ public class GameOfLife {
     }
 
     //MaxIteration como metodo de corte
-    public void simulate3D(int maxIterations) {
+    public void simulate3D(int maxIterations, Rules rules) {
         Grid3D grid = new Grid3D(this.M);
-        Rules rules = new Rules();
 
         try {
             create3DOutputFile(this.particles, 0);
@@ -285,5 +274,9 @@ public class GameOfLife {
             }
         }
         return false;
+    }
+
+    public static Rules defaultRules() {
+        return new Rules(1, 4, 3, 3);
     }
 }

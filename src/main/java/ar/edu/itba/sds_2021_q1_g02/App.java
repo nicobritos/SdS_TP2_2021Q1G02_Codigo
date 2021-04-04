@@ -20,9 +20,9 @@ public class App {
 
         System.out.println("Running simulation");
         if (CommandParser.getInstance().isEnable3D())
-            GOL.simulate3D(CommandParser.getInstance().getMaxIterations());
+            GOL.simulate3D(CommandParser.getInstance().getMaxIterations(), GameOfLife.defaultRules());
         else
-            GOL.simulate2D(CommandParser.getInstance().getMaxIterations());
+            GOL.simulate2D(CommandParser.getInstance().getMaxIterations(), GameOfLife.defaultRules());
     }
 }
 
