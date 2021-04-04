@@ -1,6 +1,7 @@
 package ar.edu.itba.sds_2021_q1_g02;
 
 import ar.edu.itba.sds_2021_q1_g02.models.CellularParticle;
+import ar.edu.itba.sds_2021_q1_g02.models.Rules;
 import ar.edu.itba.sds_2021_q1_g02.parsers.CommandParser;
 import ar.edu.itba.sds_2021_q1_g02.parsers.ParticleParser;
 import javafx.util.Pair;
@@ -22,7 +23,7 @@ public class App {
         if (CommandParser.getInstance().isEnable3D())
             GOL.simulate3D(CommandParser.getInstance().getMaxIterations(), GameOfLife.defaultRules());
         else
-            GOL.simulate2D(CommandParser.getInstance().getMaxIterations(), GameOfLife.defaultRules());
+            GOL.simulate2D(CommandParser.getInstance().getMaxIterations(), new Rules(5, 6, 4, 6));
     }
 }
 

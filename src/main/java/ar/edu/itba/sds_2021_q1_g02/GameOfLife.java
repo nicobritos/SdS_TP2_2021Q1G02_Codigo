@@ -18,8 +18,8 @@ public class GameOfLife {
     private static final MooreNeighborhood MOORE_NEIGHBORHOOD = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
     private static final Rules DEFAULT_RULES = new Rules(1, 4, 3, 3);
 
-    private List<CellularParticle> particles;
-    private int M;
+    private final List<CellularParticle> particles;
+    private final int M;
 
     public GameOfLife(List<CellularParticle> particles, final int M) {
         this.particles = particles;
@@ -31,21 +31,22 @@ public class GameOfLife {
         Grid2D grid = new Grid2D(this.M);
 
         try {
-            create2DOutputFile(this.particles, 0);
+            this.create2DOutputFile(this.particles, 0);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(true); i++) {
+        long alive = this.particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(true); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
-            for (int x = 0; x < M; x++) {
-                for (int y = 0; y < M; y++) {
+            for (int x = 0; x < this.M; x++) {
+                for (int y = 0; y < this.M; y++) {
                     Position currentPosition = new Position(x, y);
-                    int neighborsAlive = getTotalNeighborsAlive(grid.getGrid(), currentPosition);
+                    int neighborsAlive = this.getTotalNeighborsAlive(grid.getGrid(), currentPosition);
                     Pair<State, Boolean> stateUpdated =
                             rules.applyRules(((CellularParticle) grid.getParticle(currentPosition)).getState(),
                                     neighborsAlive);
@@ -55,16 +56,21 @@ public class GameOfLife {
                 }
             }
             for (Entry<CellularParticle, State> entry : nextStates.entrySet()) {
-                updateParticleState(entry.getKey(), entry.getValue());
+                alive += this.updateParticleState(entry.getKey(), entry.getValue());
             }
 
             try {
-                create2DOutputFile(this.particles, i);
+                this.create2DOutputFile(this.particles, i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             System.out.println("Finished iteration: " + i);
+
+            if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
+                // Nothing else to do, all particles are dead
+                break;
+            }
         }
     }
 
@@ -73,20 +79,21 @@ public class GameOfLife {
         Grid3D grid = new Grid3D(this.M);
 
         try {
-            create3DOutputFile(this.particles, 0);
+            this.create3DOutputFile(this.particles, 0);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < maxIterations && !areCuttingMethodsApplied(false); i++) {
+        long alive = this.particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(false); i++) {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
             grid.populateGrid(this.particles);
 
-            for (int x = 0; x < M; x++) {
-                for (int y = 0; y < M; y++) {
-                    for (int z = 0; z < M; z++) {
+            for (int x = 0; x < this.M; x++) {
+                for (int y = 0; y < this.M; y++) {
+                    for (int z = 0; z < this.M; z++) {
                         Position currentPosition = new Position(x, y, z);
                         int neighborsAlive = this.getTotalNeighborsAlive(grid.getGrid(), currentPosition);
                         Pair<State, Boolean> stateUpdated =
@@ -99,16 +106,21 @@ public class GameOfLife {
                 }
             }
             for (Entry<CellularParticle, State> entry : nextStates.entrySet()) {
-                updateParticleState(entry.getKey(), entry.getValue());
+                alive += this.updateParticleState(entry.getKey(), entry.getValue());
             }
 
             try {
-                create3DOutputFile(this.particles, i);
+                this.create3DOutputFile(this.particles, i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             System.out.println("Finished iteration: " + i);
+
+            if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
+                // Nothing else to do, all particles are dead
+                break;
+            }
         }
     }
 
@@ -156,7 +168,6 @@ public class GameOfLife {
                 myFile.write('\n');
             }
         }
-
 
         myFile.close();
     }
@@ -215,12 +226,15 @@ public class GameOfLife {
             }
         }
 
-
         myFile.close();
     }
 
-    private void updateParticleState(CellularParticle particle, State nextState) {
+    private int updateParticleState(CellularParticle particle, State nextState) {
         particle.setState(nextState);
+
+        if (nextState.equals(State.ALIVE))
+            return 1;
+        return -1;
     }
 
     private int getTotalNeighborsAlive(Particle[][] grid, Position position) {
@@ -264,12 +278,12 @@ public class GameOfLife {
 
     private boolean areCuttingMethodsApplied(boolean is2Dsimulation) {
         for (CellularParticle particle : this.particles) {
-            if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M)) {
+            if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M - 1) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M - 1)) {
                 if (particle.getState().equals(State.ALIVE))
                     return true;
             }
             if (!is2Dsimulation) {
-                if ((particle.getPosition().getZ() == 0) || (particle.getPosition().getZ() == this.M)) {
+                if ((particle.getPosition().getZ() == 0) || (particle.getPosition().getZ() == this.M - 1)) {
                     return true;
                 }
             }
