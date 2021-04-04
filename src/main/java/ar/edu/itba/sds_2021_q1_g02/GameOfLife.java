@@ -6,12 +6,8 @@ import javafx.util.Pair;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class GameOfLife {
     private static final int MOORE_NEIGHBORHOOD_RADIUS = 1;
@@ -35,20 +31,23 @@ public class GameOfLife {
     }
 
     //MaxIteration como metodo de corte
-    public void simulate2D(int maxIterations, Rules rules) {
+    public void simulate2D(int maxIterations, Rules rules, String fileNamePrefix) {
         Grid2D grid = new Grid2D(this.M);
-        grid.populateGrid(this.particles);
+
+        List<CellularParticle> particles = new ArrayList<>(this.particles.size());
+        for (CellularParticle particle : this.particles) {
+            particles.add(particle.copy());
+        }
+        grid.populateGrid(particles);
 
         try {
-            this.create2DOutputFile(this.particles, 0);
+            this.create2DOutputFile(particles, 0, fileNamePrefix);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        long alive = this.particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
-        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(true); i++) {
-            System.out.println("Started iteration: " + i);
-
+        long alive = particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(true, particles); i++) {
             Map<CellularParticle, State> nextStates = new HashMap<>();
 
             for (int x = 0; x < this.M; x++) {
@@ -68,12 +67,10 @@ public class GameOfLife {
             }
 
             try {
-                this.create2DOutputFile(this.particles, i);
+                this.create2DOutputFile(particles, i, fileNamePrefix);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            System.out.println("Finished iteration: " + i);
 
             if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
                 // Nothing else to do, all particles are dead
@@ -83,20 +80,23 @@ public class GameOfLife {
     }
 
     //MaxIteration como metodo de corte
-    public void simulate3D(int maxIterations, Rules rules) {
+    public void simulate3D(int maxIterations, Rules rules, String fileNamePrefix) {
         Grid3D grid = new Grid3D(this.M);
-        grid.populateGrid(this.particles);
+
+        List<CellularParticle> particles = new ArrayList<>(this.particles.size());
+        for (CellularParticle particle : this.particles) {
+            particles.add(particle.copy());
+        }
+        grid.populateGrid(particles);
 
         try {
-            this.create3DOutputFile(this.particles, 0);
+            this.create3DOutputFile(particles, 0, fileNamePrefix);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        long alive = this.particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
-        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(false); i++) {
-            System.out.println("Started iteration: " + i);
-
+        long alive = particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(false, particles); i++) {
             Map<CellularParticle, State> nextStates = new HashMap<>();
 
             for (int x = 0; x < this.M; x++) {
@@ -118,12 +118,10 @@ public class GameOfLife {
             }
 
             try {
-                this.create3DOutputFile(this.particles, i);
+                this.create3DOutputFile(particles, i, fileNamePrefix);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            System.out.println("Finished iteration: " + i);
 
             if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
                 // Nothing else to do, all particles are dead
@@ -132,9 +130,9 @@ public class GameOfLife {
         }
     }
 
-    private void create2DOutputFile(List<CellularParticle> particles, int i) throws IOException {
+    private void create2DOutputFile(List<CellularParticle> particles, int i, String fileNamePrefix) throws IOException {
         // create new file
-        String filePath = "./ovito.2d." + i + ".xyz";
+        String filePath = "./sample_outputs/" + fileNamePrefix + "." + i + ".xyz";
         File file = new File(filePath);
         if (!file.createNewFile()) {
             file.delete();
@@ -192,9 +190,9 @@ public class GameOfLife {
         myFile.close();
     }
 
-    private void create3DOutputFile(List<CellularParticle> particles, int i) throws IOException {
+    private void create3DOutputFile(List<CellularParticle> particles, int i, String fileNamePrefix) throws IOException {
         // create new file
-        String filePath = "./ovito.3d." + i + ".xyz";
+        String filePath = "./sample_outputs/" + fileNamePrefix + "." + i + ".xyz";
         File file = new File(filePath);
         if (!file.createNewFile()) {
             file.delete();
@@ -326,8 +324,8 @@ public class GameOfLife {
         }
     }
 
-    private boolean areCuttingMethodsApplied(boolean is2DSimulation) {
-        for (CellularParticle particle : this.particles) {
+    private boolean areCuttingMethodsApplied(boolean is2DSimulation, List<CellularParticle> particles) {
+        for (CellularParticle particle : particles) {
             if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M - 1) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M - 1)) {
                 if (particle.getState().equals(State.ALIVE))
                     return true;
