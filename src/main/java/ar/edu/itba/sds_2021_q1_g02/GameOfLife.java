@@ -37,6 +37,7 @@ public class GameOfLife {
     //MaxIteration como metodo de corte
     public void simulate2D(int maxIterations, Rules rules) {
         Grid2D grid = new Grid2D(this.M);
+        grid.populateGrid(this.particles);
 
         try {
             this.create2DOutputFile(this.particles, 0);
@@ -49,7 +50,6 @@ public class GameOfLife {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
-            grid.populateGrid(this.particles);
 
             for (int x = 0; x < this.M; x++) {
                 for (int y = 0; y < this.M; y++) {
@@ -85,6 +85,7 @@ public class GameOfLife {
     //MaxIteration como metodo de corte
     public void simulate3D(int maxIterations, Rules rules) {
         Grid3D grid = new Grid3D(this.M);
+        grid.populateGrid(this.particles);
 
         try {
             this.create3DOutputFile(this.particles, 0);
@@ -97,7 +98,6 @@ public class GameOfLife {
             System.out.println("Started iteration: " + i);
 
             Map<CellularParticle, State> nextStates = new HashMap<>();
-            grid.populateGrid(this.particles);
 
             for (int x = 0; x < this.M; x++) {
                 for (int y = 0; y < this.M; y++) {
