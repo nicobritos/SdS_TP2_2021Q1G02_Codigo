@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class GameOfLife {
     private static final int MOORE_NEIGHBORHOOD_RADIUS = 1;
     private static final MooreNeighborhood MOORE_NEIGHBORHOOD = new MooreNeighborhood(MOORE_NEIGHBORHOOD_RADIUS);
+    private static final Rules DEFAULT_RULES = new Rules(1, 4, 3, 3);
 
     private List<CellularParticle> particles;
     private int M;
@@ -277,6 +278,6 @@ public class GameOfLife {
     }
 
     public static Rules defaultRules() {
-        return new Rules(1, 4, 3, 3);
+        return DEFAULT_RULES;
     }
 }
