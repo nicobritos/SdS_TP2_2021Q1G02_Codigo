@@ -10,7 +10,7 @@ public class Rules {
     private int revivalMaxLimit;
 
     public Rules() {
-        this.solitudeDeathLimit = 2;
+        this.solitudeDeathLimit = 1;
         this.overpopulationDeathLimit = 4;
         this.revivalMinLimit = 3;
         this.revivalMaxLimit = 3;
@@ -24,8 +24,7 @@ public class Rules {
     }
 
     private boolean deathSolitudeRule(final int neighborsAlive) {
-        int MIN_NEIGHBOURS_ALIVE = 0;
-        return (neighborsAlive >= MIN_NEIGHBOURS_ALIVE && neighborsAlive <= this.solitudeDeathLimit);
+        return neighborsAlive <= this.solitudeDeathLimit;
     }
 
     private boolean deathOverpopulationRule(final int neighborsAlive) {
