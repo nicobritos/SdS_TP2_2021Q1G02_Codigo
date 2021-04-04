@@ -15,8 +15,8 @@ public class Rules {
         this.revivalMaxLimit = revivalMaxLimit;
     }
 
-    public int getSolitudeDeathLimit() {
-        return this.solitudeDeathLimit;
+    public int getRevivalMinLimit() {
+        return this.revivalMinLimit;
     }
 
     private boolean deathSolitudeRule(final int neighborsAlive) {

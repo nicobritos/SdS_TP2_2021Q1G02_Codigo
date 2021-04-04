@@ -25,8 +25,8 @@ public class GameOfLife {
         this.center = M / 2.0;
         this.maxDistance = Math.sqrt(
                 Math.pow(this.center, 2) +
-                Math.pow(this.center, 2) +
-                Math.pow(this.center, 2)
+                        Math.pow(this.center, 2) +
+                        Math.pow(this.center, 2)
         );
     }
 
@@ -46,7 +46,8 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        long alive = particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        long alive =
+                particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
         for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(true, particles); i++) {
             Map<CellularParticle, State> nextStates = new HashMap<>();
 
@@ -72,7 +73,7 @@ public class GameOfLife {
                 e.printStackTrace();
             }
 
-            if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
+            if (alive == 0 && rules.getRevivalMinLimit() > 0) {
                 // Nothing else to do, all particles are dead
                 break;
             }
@@ -95,7 +96,8 @@ public class GameOfLife {
             e.printStackTrace();
         }
 
-        long alive = particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
+        long alive =
+                particles.stream().filter(cellularParticle -> cellularParticle.getState().equals(State.ALIVE)).count();
         for (int i = 1; i < maxIterations && !this.areCuttingMethodsApplied(false, particles); i++) {
             Map<CellularParticle, State> nextStates = new HashMap<>();
 
@@ -123,7 +125,7 @@ public class GameOfLife {
                 e.printStackTrace();
             }
 
-            if (alive == 0 && rules.getSolitudeDeathLimit() > 0) {
+            if (alive == 0 && rules.getRevivalMinLimit() > 0) {
                 // Nothing else to do, all particles are dead
                 break;
             }
@@ -308,7 +310,7 @@ public class GameOfLife {
     private Color getParticleColor(Particle particle, boolean is2DSimulation) {
         double rawDistance =
                 Math.pow(particle.getPosition().getX() - this.center, 2) +
-                Math.pow(particle.getPosition().getY() - this.center, 2);
+                        Math.pow(particle.getPosition().getY() - this.center, 2);
         if (!is2DSimulation) {
             rawDistance += Math.pow(particle.getPosition().getZ() - this.center, 2);
         }
