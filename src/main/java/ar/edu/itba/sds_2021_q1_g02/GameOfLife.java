@@ -114,7 +114,7 @@ public class GameOfLife {
 
     private void create2DOutputFile(List<CellularParticle> particles, int i) throws IOException {
         // create new file
-        String filePath = "./ovito.2d." + i + ".txt";
+        String filePath = "./ovito.2d." + i + ".xyz";
         File file = new File(filePath);
         if (!file.createNewFile()) {
             file.delete();
@@ -126,7 +126,7 @@ public class GameOfLife {
         FileWriter myFile = new FileWriter(filePath);
         myFile.write(Long.toString(count));
         myFile.write('\n');
-        myFile.write('\n');
+        myFile.write("Properties=id:R:1:radius:R:1:pos:R:2:transparency:R:1\n");
 
         Map<Integer, Map<Integer, CellularParticle>> xyParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {
@@ -163,7 +163,7 @@ public class GameOfLife {
 
     private void create3DOutputFile(List<CellularParticle> particles, int i) throws IOException {
         // create new file
-        String filePath = "./ovito.3d." + i + ".txt";
+        String filePath = "./ovito.3d." + i + ".xyz";
         File file = new File(filePath);
         if (!file.createNewFile()) {
             file.delete();
@@ -175,7 +175,7 @@ public class GameOfLife {
         FileWriter myFile = new FileWriter(filePath);
         myFile.write(Long.toString(count));
         myFile.write('\n');
-        myFile.write('\n');
+        myFile.write("Properties=id:R:1:radius:R:1:pos:R:3:transparency:R:1\n");
 
         Map<Integer, Map<Integer, Map<Integer, CellularParticle>>> xyzParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {

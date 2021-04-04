@@ -20,8 +20,8 @@ import glob
 
 # Get the total number of args passed
 total = len(sys.argv)
-if total != 4:
-    print("3 argument needed, 1. 2D or 3D, 2. length of the side of the matrix in which there will be \'alive\', 3. percentage of alive particles (float)")
+if total != 5:
+    print("4 argument needed, 1. 2D or 3D, 2. length of the side of the matrix in which there will be \'alive\', 3. percentage of alive particles (float), 4. qty of margin cells on the sides (ie 40)")
     quit()
 if sys.argv[1] != "2D" and sys.argv[1] != "3D":
     print("3 argument needed, 1. 2D or 3D (check it has to be in CAPS_LOCK), 2.length of the side of the matrix in which there will be \'alive\' (L^2 (or L^3) = No of cells), 3. percentage of alive particles (float)")
@@ -31,7 +31,7 @@ if os.path.exists(input_file):
     os.remove(input_file)
 input = open(input_file, "a")
 
-fileList = glob.glob('ovito.*d.*.txt')
+fileList = glob.glob('ovito.*d.*.xyz')
 print(fileList)
 for filePath in fileList:
     try:
@@ -39,7 +39,7 @@ for filePath in fileList:
     except:
         print("Error while deleting file : ", filePath)
 
-OPEN_SPACE = 40
+OPEN_SPACE = int(sys.argv[4])
 L = int(sys.argv[2])
 w, h, d = L+ 2*OPEN_SPACE, L +2*OPEN_SPACE, L+2*OPEN_SPACE
 alive_percentage = float(sys.argv[3]) / 100
