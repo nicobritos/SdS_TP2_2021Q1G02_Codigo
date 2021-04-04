@@ -20,10 +20,18 @@ public class GameOfLife {
 
     private final List<CellularParticle> particles;
     private final int M;
+    private final double center;
+    private final double maxDistance;
 
     public GameOfLife(List<CellularParticle> particles, final int M) {
         this.particles = particles;
         this.M = M;
+        this.center = M / 2.0;
+        this.maxDistance = Math.sqrt(
+                Math.pow(this.center, 2) +
+                Math.pow(this.center, 2) +
+                Math.pow(this.center, 2)
+        );
     }
 
     //MaxIteration como metodo de corte
@@ -138,7 +146,7 @@ public class GameOfLife {
         FileWriter myFile = new FileWriter(filePath);
         myFile.write(Long.toString(count));
         myFile.write('\n');
-        myFile.write("Properties=id:R:1:radius:R:1:pos:R:2:transparency:R:1\n");
+        myFile.write("Properties=id:R:1:radius:R:1:pos:R:2:transparency:R:1:color:R:3\n");
 
         Map<Integer, Map<Integer, CellularParticle>> xyParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {
@@ -164,6 +172,18 @@ public class GameOfLife {
                 myFile.write('\t');
 
                 myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
+                myFile.write('\t');
+
+                Color particleColor;
+                if (particle.getState().equals(State.ALIVE))
+                    particleColor = this.getParticleColor(particle, true);
+                else
+                    particleColor = new Color(0, 0, 0);
+                myFile.write(Double.toString(particleColor.getRed()));
+                myFile.write('\t');
+                myFile.write(Double.toString(particleColor.getGreen()));
+                myFile.write('\t');
+                myFile.write(Double.toString(particleColor.getBlue()));
 
                 myFile.write('\n');
             }
@@ -181,12 +201,12 @@ public class GameOfLife {
             file.createNewFile();
         }
 
-        long count = particles.stream().count();
+        long count = particles.size();
         // write on file
         FileWriter myFile = new FileWriter(filePath);
         myFile.write(Long.toString(count));
         myFile.write('\n');
-        myFile.write("Properties=id:R:1:radius:R:1:pos:R:3:transparency:R:1\n");
+        myFile.write("Properties=id:R:1:radius:R:1:pos:R:3:transparency:R:1:color:R:3\n");
 
         Map<Integer, Map<Integer, Map<Integer, CellularParticle>>> xyzParticleMap = new HashMap<>();
         for (CellularParticle particle : particles) {
@@ -219,6 +239,17 @@ public class GameOfLife {
                     myFile.write('\t');
 
                     myFile.write(particle.getState().equals(State.ALIVE) ? "0" : "1");
+
+                    Color particleColor;
+                    if (particle.getState().equals(State.ALIVE))
+                        particleColor = this.getParticleColor(particle, false);
+                    else
+                        particleColor = new Color(0, 0, 0);
+                    myFile.write(Double.toString(particleColor.getRed()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particleColor.getGreen()));
+                    myFile.write('\t');
+                    myFile.write(Double.toString(particleColor.getBlue()));
 
 
                     myFile.write('\n');
@@ -276,15 +307,35 @@ public class GameOfLife {
         return neighborsAlive;
     }
 
-    private boolean areCuttingMethodsApplied(boolean is2Dsimulation) {
+    private Color getParticleColor(Particle particle, boolean is2DSimulation) {
+        double rawDistance =
+                Math.pow(particle.getPosition().getX() - this.center, 2) +
+                Math.pow(particle.getPosition().getY() - this.center, 2);
+        if (!is2DSimulation) {
+            rawDistance += Math.pow(particle.getPosition().getZ() - this.center, 2);
+        }
+
+        double distance = Math.sqrt(rawDistance);
+
+        double colorCutoff = this.maxDistance / 2;
+        if (distance < colorCutoff) {
+            return new Color(1 - (distance / colorCutoff), (distance / colorCutoff), 0);
+        } else {
+            distance = distance - colorCutoff;
+            return new Color((distance / colorCutoff), 1 - (distance / colorCutoff), 0);
+        }
+    }
+
+    private boolean areCuttingMethodsApplied(boolean is2DSimulation) {
         for (CellularParticle particle : this.particles) {
             if ((particle.getPosition().getX() == 0) || (particle.getPosition().getX() == this.M - 1) || (particle.getPosition().getY() == 0) || (particle.getPosition().getY() == this.M - 1)) {
                 if (particle.getState().equals(State.ALIVE))
                     return true;
             }
-            if (!is2Dsimulation) {
+            if (!is2DSimulation) {
                 if ((particle.getPosition().getZ() == 0) || (particle.getPosition().getZ() == this.M - 1)) {
-                    return true;
+                    if (particle.getState().equals(State.ALIVE))
+                        return true;
                 }
             }
         }

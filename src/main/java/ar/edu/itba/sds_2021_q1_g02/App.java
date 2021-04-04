@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class App {
+    private static final Rules MANDALA_2D = new Rules(2, 7, 3, 6);
+    private static final Rules DEFAULT_OVERPOPULATION_2D = new Rules(1, 3, 2, 3);
+
     public static void main(String[] args) throws ParseException, IOException {
         CommandParser.getInstance().parse(args);
 
@@ -23,7 +26,7 @@ public class App {
         if (CommandParser.getInstance().isEnable3D())
             GOL.simulate3D(CommandParser.getInstance().getMaxIterations(), GameOfLife.defaultRules());
         else
-            GOL.simulate2D(CommandParser.getInstance().getMaxIterations(), new Rules(5, 6, 4, 6));
+            GOL.simulate2D(CommandParser.getInstance().getMaxIterations(), DEFAULT_OVERPOPULATION_2D);
     }
 }
 
