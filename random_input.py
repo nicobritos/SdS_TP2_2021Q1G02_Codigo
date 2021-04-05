@@ -123,16 +123,17 @@ def generate_all_files():
 
 
 def main():
-    # is_2d, l, alive_percentage, open_space = parse_args()
-    #
-    # file_path = 'input.txt'
-    #
-    # if is_2d:
-    #     generate_2d(file_path, l, open_space, alive_percentage)
-    # else:
-    #     generate_3d(file_path, l, open_space, alive_percentage)
+    if len(sys.argv) == 1:
+        generate_all_files()
+    else:
+        is_2d, l, alive_percentage, open_space = parse_args()
 
-    generate_all_files()
+        file_path = 'input.txt'
+
+        if is_2d:
+            generate_2d(file_path, l, open_space, alive_percentage)
+        else:
+            generate_3d(file_path, l, open_space, alive_percentage)
 
 
 if __name__ == '__main__':

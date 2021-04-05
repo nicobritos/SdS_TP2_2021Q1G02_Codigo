@@ -1,5 +1,5 @@
 import os
-
+import sys
 import matplotlib.pyplot as plt
 
 
@@ -19,10 +19,9 @@ def generate_graphs(file_prefix, state_changes, state_changes_percentage):
     plt.clf()
 
 
-def generate_2d_graphs(folder_prefix, output_prefix, rule):
+def generate_2d_graphs(file_prefix, output_prefix):
     j = 0
-    folder_path = folder_prefix + "_R" + str(rule) + "_2D"
-    file_path = os.path.join(folder_path, str(j) + ".xyz")
+    file_path = file_prefix + str(j) + ".xyz"
 
     state_changes_over_time = [0]
     state_changes_percentage = [0]
@@ -65,21 +64,20 @@ def generate_2d_graphs(folder_prefix, output_prefix, rule):
             state_changes_percentage.append(0)
 
         j += 1
-        file_path = folder_path + "\\" + str(j) + ".xyz"
+        file_path = file_prefix + str(j) + ".xyz"
 
-    # generate_graphs(
-    #     output_prefix + "_R" + str(rule + 1) + "_2D",
-    #     state_changes_over_time,
-    #     state_changes_percentage
-    # )
+    generate_graphs(
+        output_prefix,
+        state_changes_over_time,
+        state_changes_percentage
+    )
 
     return sum(state_changes_percentage), sum(state_changes_percentage) / len(state_changes_percentage)
 
 
-def generate_3d_graphs(folder_prefix, output_prefix, rule):
+def generate_3d_graphs(file_prefix, output_prefix):
     j = 0
-    folder_path = folder_prefix + "_R" + str(rule) + "_3D"
-    file_path = os.path.join(folder_path, str(j) + ".xyz")
+    file_path = file_prefix + str(j) + ".xyz"
 
     state_changes_over_time = [0]
     state_changes_percentage = [0]
@@ -120,13 +118,13 @@ def generate_3d_graphs(folder_prefix, output_prefix, rule):
             state_changes_percentage.append(0)
 
         j += 1
-        file_path = folder_path + "\\" + str(j) + ".xyz"
+        file_path = file_prefix + str(j) + ".xyz"
 
-    # generate_graphs(
-    #     output_prefix + "_R" + str(rule + 1) + "_3D",
-    #     state_changes_over_time,
-    #     state_changes_percentage
-    # )
+    generate_graphs(
+        output_prefix,
+        state_changes_over_time,
+        state_changes_percentage
+    )
 
     return sum(state_changes_percentage), sum(state_changes_percentage) / len(state_changes_percentage)
 
@@ -190,33 +188,41 @@ def main_graph(samples_2d, samples_3d):
 
 
 def main():
-    samples_2d = []
-    samples_3d = []
+    if len(sys.argv) == 1:
+        samples_2d = []
+        samples_3d = []
 
-    for n in [5, 21, 37, 53, 69, 85]:
-        rule_samples_2d = []
-        rule_samples_3d = []
+        for n in [5, 21, 37, 53, 69, 85]:
+            rule_samples_2d = []
+            rule_samples_3d = []
 
-        for rule in range(3):
-            inner_samples_2d = []
-            inner_samples_3d = []
+            for rule in range(3):
+                inner_samples_2d = []
+                inner_samples_3d = []
 
-            for i in range(3):
-                s, pond = generate_2d_graphs(os.path.join('..', 'sample_outputs', 'ovito_particles_' + str(n) + '_' + str(i)), 'graph_' + str(n), rule)
-                inner_samples_2d.append(pond)
+                for i in range(3):
+                    s, pond = generate_2d_graphs(os.path.join('..', 'sample_outputs', 'ovito_particles_' + str(n) + '_' + str(i) + '_R' + str(rule) + '_2D'), 'graph_' + str(n), rule)
+                    inner_samples_2d.append(pond)
 
-                s, pond = generate_3d_graphs(os.path.join('..', 'sample_outputs', 'ovito_particles_' + str(n) + '_' + str(i)), 'graph_' + str(n), rule)
-                inner_samples_3d.append(pond)
+                    s, pond = generate_3d_graphs(os.path.join('..', 'sample_outputs', 'ovito_particles_' + str(n) + '_' + str(i)) + '_R' + str(rule) + '_3D', 'graph_' + str(n), rule)
+                    inner_samples_3d.append(pond)
 
-            rule_samples_2d.append(inner_samples_2d)
-            rule_samples_3d.append(inner_samples_3d)
+                rule_samples_2d.append(inner_samples_2d)
+                rule_samples_3d.append(inner_samples_3d)
 
-        samples_2d.append(rule_samples_2d)
-        samples_3d.append(rule_samples_3d)
+            samples_2d.append(rule_samples_2d)
+            samples_3d.append(rule_samples_3d)
 
-        print('Done graphs of ' + str(n) + '%')
+            print('Done graphs of ' + str(n) + '%')
 
-    main_graph(samples_2d, samples_3d)
+        main_graph(samples_2d, samples_3d)
+    else:
+        if len(sys.argv) < 3:
+            print('Arguments: 1. 2d or 3d (case sensitive). 2. filepath. If no arguments provided, it will try to parse a specific file format and folder structure')
+        if sys.argv[1] == '2d':
+            generate_2d_graphs(sys.argv[2], 'out_' + sys.argv[2])
+        else:
+            generate_3d_graphs(sys.argv[2], 'out_' + sys.argv[2])
 
 
 if __name__ == '__main__':
