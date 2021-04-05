@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +23,7 @@ public abstract class ParticleParser {
             String data = myReader.nextLine();
             M = Integer.parseInt(data);
 
-            particles = new LinkedList<>();
+            particles = new ArrayList<>((int) (is3D ? Math.pow(M, 2) : Math.pow(M, 3)));
 
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();

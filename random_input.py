@@ -110,15 +110,15 @@ def generate_3d(file_path, L, OPEN_SPACE, alive_percentage):
 
 
 def generate_all_files():
-    for alive_percentage in range(10, 101, 10):
-        for i in range(5):
+    for alive_percentage in range(5, 100, 16):
+        for i in range(3):
             file_path_2d = './sample_inputs/input_2d_' + str(alive_percentage) + '_' + str(i) + '.txt'
             file_path_3d = './sample_inputs/input_3d_' + str(alive_percentage) + '_' + str(i) + '.txt'
 
-            generate_2d(file_path_2d, 30, 60, alive_percentage / 100.0)
+            generate_2d(file_path_2d, 25, 60, alive_percentage / 100.0)
             print(file_path_2d)
 
-            generate_3d(file_path_3d, 20, 40, alive_percentage / 100.0)
+            generate_3d(file_path_3d, 15, 20, alive_percentage / 100.0)
             print(file_path_3d)
 
 
